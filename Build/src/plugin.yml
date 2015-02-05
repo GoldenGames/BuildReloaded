@@ -1,0 +1,9 @@
+name: BuildReloaded
+version: 0.4
+main: me.mani.build.core.Build
+depend: [GoldenLib]
+
+commands:
+  ping:
+  ts:
+  settarget:
