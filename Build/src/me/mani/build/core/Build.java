@@ -1,9 +1,7 @@
 package me.mani.build.core;
 
-import java.io.InputStream;
-import java.util.Scanner;
-
 import me.mani.build.core.command.PingCommand;
+import me.mani.build.core.command.RankCommand;
 import me.mani.build.core.command.SetTargetCommand;
 import me.mani.build.core.command.TSCommand;
 import me.mani.build.core.config.Config;
@@ -13,6 +11,7 @@ import me.mani.build.core.listener.BlockPlaceListener;
 import me.mani.build.core.listener.PlayerInteractListener;
 import me.mani.build.core.listener.PlayerJoinListener;
 import me.mani.build.core.listener.ServerListPingListener;
+import me.mani.build.ranks.RankManager;
 import me.mani.build.teamlezz.Teamlezz;
 import me.mani.build.tweetlezz.Tweetlezz;
 
@@ -31,6 +30,7 @@ public class Build extends JavaPlugin {
 	private static Build buildInstance;
 
 	public static Tweetlezz tweetlezz;
+	public static RankManager rankManager;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -51,6 +51,9 @@ public class Build extends JavaPlugin {
 			getServer().getPluginManager()
 					.callEvent(new PlayerJoinEvent(p, ""));
 		
+		rankManager = new RankManager();
+		rankManager.loadRanks();
+		
 		ServerListPingListener.target = Config.getConfig().getString("currentTarget"); // Loading target from config
 	}
 
@@ -59,6 +62,8 @@ public class Build extends JavaPlugin {
 		Config.getConfig().set("currentTarget", ServerListPingListener.target); // Saving target to config
 		saveConfig();
 		
+		rankManager.saveRanks();
+		
 		tweetlezz.disconnect(); // Disconnect the async dispatcher
 	}
 	
@@ -66,6 +71,7 @@ public class Build extends JavaPlugin {
 		new PingCommand();
 		new TSCommand();
 		new SetTargetCommand();
+		new RankCommand();
 	}
 
 	private void registerListener() {
@@ -91,41 +97,20 @@ public class Build extends JavaPlugin {
 			}
 
 			@Override
-			public void onException(Exception arg0) {
-			}
+			public void onException(Exception arg0) {}
 
 			@Override
-			public void onTrackLimitationNotice(int arg0) {
-			}
+			public void onTrackLimitationNotice(int arg0) {}
 
 			@Override
-			public void onStallWarning(StallWarning arg0) {
-			}
+			public void onStallWarning(StallWarning arg0) {}
 
 			@Override
-			public void onScrubGeo(long arg0, long arg1) {
-			}
+			public void onScrubGeo(long arg0, long arg1) {}
 
 			@Override
-			public void onDeletionNotice(StatusDeletionNotice arg0) {
-			}
+			public void onDeletionNotice(StatusDeletionNotice arg0) {}
 		});
-	}
-
-	private void printChangeLog() {
-		Bukkit.broadcastMessage("§7Changelog:");
-		InputStream is = null;
-		is = getClass().getResourceAsStream("/changelog.txt");
-
-		if (is == null)
-			return;
-		
-		Scanner scanner = new Scanner(is);
-		
-		while (scanner.hasNext())
-			Bukkit.broadcastMessage(" §8- " + scanner.nextLine());
-		
-		scanner.close();
 	}
 
 	public static Build getInstance() {

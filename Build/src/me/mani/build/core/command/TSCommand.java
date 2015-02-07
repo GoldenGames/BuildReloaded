@@ -16,9 +16,10 @@ public class TSCommand extends BuildCommand {
 	}
 
 	@Override
-	public void onCommand(Player p, String[] args) {
+	public String onCommand(Player p, String[] args) {
+		
 		if  (args[0] == null)
-			return;
+			return messageFormat + "/ts <INFO|BROADCAST> [ARGS]...";
 		
 		TS3Api api = Teamlezz.getAPI();
 		
@@ -28,19 +29,22 @@ public class TSCommand extends BuildCommand {
 			Bukkit.broadcastMessage("\n ");
 			for (Channel c : api.getChannels())
 				Bukkit.broadcastMessage(c.getId()+ " | " + c.getName());
-			return;
+			return messageFormat + "Die Channel + Client Liste wurde angezeigt!";
 		}
 		else if (args[0].equalsIgnoreCase("broadcast")) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 1; i < args.length; i++)
 				sb.append(args[i] + " ");
 			api.broadcast(sb.toString().trim());
-			return;
+			return messageFormat + "Die Nchricht wurde in den Teamspeak gesendet!";
 		}
 		
 		int clientID = Integer.valueOf(args[0]);
 		int channelID = Integer.valueOf(args[1]);		
 		
 		api.moveClient(clientID, channelID);
+		
+		return messageFormat + "Der Client wurde verschoben!";
+		
 	}
 }

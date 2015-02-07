@@ -10,8 +10,8 @@ public class PingCommand extends BuildCommand {
 	}
 
 	@Override
-	public void onCommand(Player p, String[] args) {
-		p.sendMessage(messageFormat + ((CraftPlayer) p).getHandle().ping);
+	public String onCommand(Player p, String[] args) {
+		return messageFormat + ((CraftPlayer) p).getHandle().ping + " ms";
 	}
 
 }

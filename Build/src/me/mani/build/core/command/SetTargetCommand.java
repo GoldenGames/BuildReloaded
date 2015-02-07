@@ -12,14 +12,14 @@ public class SetTargetCommand extends BuildCommand {
 	}
 
 	@Override
-	public void onCommand(Player p, String[] args) {
+	public String onCommand(Player p, String[] args) {
 		
 		// Core
 		
 		String target = StringUtils.join(args, ' ');
 		ServerListPingListener.target = target;
-		p.sendMessage(messageFormat + "Ziel wurde gesetzt!");
-		p.sendMessage(messageFormat + "§4Ziel: §c" + target);
+		return messageFormat + "Ziel wurde gesetzt!\n" + 
+				messageFormat + "§4Ziel: §c" + target;
 		
 	}
 	

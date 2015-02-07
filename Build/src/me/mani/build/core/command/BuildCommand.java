@@ -37,10 +37,10 @@ public abstract class BuildCommand implements CommandExecutor {
 		if (playerOnly && !(sender instanceof Player))
 			onCommand(null, args);
 		else
-			onCommand((Player) sender, args);		
+			((Player) sender).sendMessage(onCommand((Player) sender, args));		
 		return true;
 	}
 	
-	public abstract void onCommand(Player p, String[] args);
+	public abstract String onCommand(Player p, String[] args);
 
 }
